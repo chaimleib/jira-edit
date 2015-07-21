@@ -115,17 +115,18 @@ class JiraAdapter
       "Unversioned"
   end
   
-  def get_issue(issue)
-    issue = @jira.Issue.find issue
+  def get_issue(key)
+    issue = @jira.Issue.find key
   end
   
   def get_issues(conditions=[], order="updated desc", options={})
+    verbose = options.delete :verbose
     query = conditions.join " AND "
     query += " order by #{order}" if order.present?
-    if options.present?
-      puts "#{query}# options: #{options}"
-    else
-      puts "#{query}"
+    if verbose
+      puts(options.present? ? 
+        "#{query}# options: #{options}" : 
+        query)
     end
     issues = @jira.Issue.jql query, **options
   end
